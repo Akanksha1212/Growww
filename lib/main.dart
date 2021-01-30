@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'login/login.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
@@ -26,9 +27,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    initFirebaseApp();
     Timer(Duration(seconds: 4), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Login()));
     });
+  }
+
+  initFirebaseApp() async {
+    await Firebase.initializeApp();
   }
 
   // added test yourself
@@ -36,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffE5E5E5),
+      backgroundColor: Color(0xff60316E),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
