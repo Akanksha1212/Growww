@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:grow/tracks.dart';
 
 import 'login/login.dart';
 
@@ -30,7 +32,13 @@ class _SplashScreenState extends State<SplashScreen> {
     initFirebaseApp();
     Timer(Duration(seconds: 4), () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Login()));
+        context,
+        MaterialPageRoute(
+          builder: (context) => FirebaseAuth.instance.currentUser == null
+              ? Login()
+              : TracksView(),
+        ),
+      );
     });
   }
 
