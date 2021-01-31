@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:grow/services/firestore_service.dart';
 import 'package:grow/tracks_view.dart';
+import 'package:grow/services/setup_locator.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+  final firestoreService = locator<FirestoreService>();
 
   Future<String> signInWithGoogle() async {
     await Firebase.initializeApp();
@@ -38,16 +41,10 @@ class _LoginState extends State<Login> {
 
       print('signInWithGoogle succeeded: $user');
 
-      return '$user';
+      return '${user.email}';
     }
 
     return null;
-  }
-
-  Future<void> signOutGoogle() async {
-    await googleSignIn.signOut();
-
-    print("User Signed Out");
   }
 
   @override
@@ -72,13 +69,15 @@ class _LoginState extends State<Login> {
             GestureDetector(
               onTap: () {
                 signInWithGoogle().then(
-                  (value) {
-                    if (value != null)
+                  (value) async {
+                    if (value != null) {
+                      await firestoreService.isUser(value);
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => TracksView(),
                         ),
                       );
+                    }
                   },
                 );
               },

@@ -1,40 +1,85 @@
+// To parse this JSON data, do
+//
+//     final userData = userDataFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+UserData userDataFromJson(String str) => UserData.fromJson(json.decode(str));
+
+String userDataToJson(UserData data) => json.encode(data.toJson());
 
 class UserData {
-  final String email;
-  final Map<String, String> tracks;
-  UserData({
-    this.email,
-    this.tracks,
-  });
+    UserData({
+        this.tracks,
+        this.email,
+    });
 
-  factory UserData.fromSnapshot(DocumentSnapshot map) {
-    if (map == null) return null;
+    List<Track> tracks;
+    String email;
 
-    return UserData(
-      email: map['email'],
-      tracks: Map<String, String>.from(map['tracks']),
+    factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+        tracks: List<Track>.from(json["tracks"].map((x) => Track.fromJson(x))),
+        email: json["email"],
     );
-  }
+
+    Map<String, dynamic> toJson() => {
+        "tracks": List<dynamic>.from(tracks.map((x) => x.toJson())),
+        "email": email,
+    };
 }
 
-// class UserTrack {
-//   final String task;
-//   final DateTime timestamp;
-//   UserTrack({
-//     this.task,
-//     this.timestamp,
-//   });
+class Track {
+    Track({
+        this.data,
+    });
 
-//   factory UserTrack.fromMap(Map<String, dynamic> map) {
-//     if (map == null) return null;
+    Data data;
 
-//     return UserTrack(
-//       task: map['task'],
-//       timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp']),
-//     );
-//   }
-// }
+    factory Track.fromJson(Map<String, dynamic> json) => Track(
+        data: Data.fromJson(json["data"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "data": data.toJson(),
+    };
+}
+
+class Data {
+    Data({
+        this.id,
+        this.taskList,
+    });
+
+    String id;
+    List<TaskList> taskList;
+
+    factory Data.fromJson(Map<String, dynamic> json) => Data(
+        id: json["id"],
+        taskList: List<TaskList>.from(json["task_list"].map((x) => TaskList.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "task_list": List<dynamic>.from(taskList.map((x) => x.toJson())),
+    };
+}
+
+class TaskList {
+    TaskList({
+        this.details,
+        this.timestamp,
+    });
+
+    String details;
+    String timestamp;
+
+    factory TaskList.fromJson(Map<String, dynamic> json) => TaskList(
+        details: json["details"],
+        timestamp: json["timestamp"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "details": details,
+        "timestamp": timestamp,
+    };
+}

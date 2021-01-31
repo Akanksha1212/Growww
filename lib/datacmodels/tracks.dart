@@ -1,32 +1,70 @@
+// To parse this JSON data, do
+//
+//     final tracks = tracksFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+Tracks tracksFromJson(String str) => Tracks.fromJson(json.decode(str));
+
+String tracksToJson(Tracks data) => json.encode(data.toJson());
 
 class Tracks {
-  final String days;
-  final String details;
-  final String id;
-  final String img_asset;
-  final String name;
-  final String type;
   Tracks({
+    this.imgAsset,
+    this.name,
     this.days,
     this.details,
     this.id,
-    this.img_asset,
-    this.name,
     this.type,
+    this.tasks,
   });
 
-  factory Tracks.fromSnapshot(DocumentSnapshot map) {
-    if (map == null) return null;
+  String imgAsset;
+  String name;
+  String days;
+  String details;
+  String id;
+  int type;
+  List<Task> tasks;
+  int progress = -1;
 
-    return Tracks(
-        days: map['days'].toString(),
-        details: map['details'],
-        id: map['id'].toString(),
-        img_asset: map['img_asset'],
-        name: map['name'],
-        type: map['type'].toString());
-  }
+  factory Tracks.fromJson(Map<String, dynamic> json) => Tracks(
+        imgAsset: json["img_asset"],
+        name: json["name"],
+        days: json["days"],
+        details: json["details"],
+        id: json["id"],
+        type: json["type"],
+        tasks: List<Task>.from(json["tasks"].map((x) => Task.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "img_asset": imgAsset,
+        "name": name,
+        "days": days,
+        "details": details,
+        "id": id,
+        "type": type,
+        "tasks": List<dynamic>.from(tasks.map((x) => x.toJson())),
+      };
+}
+
+class Task {
+  Task({
+    this.details,
+    this.title,
+  });
+
+  String details;
+  String title;
+
+  factory Task.fromJson(Map<String, dynamic> json) => Task(
+        details: json["details"],
+        title: json["title"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "details": details,
+        "title": title,
+      };
 }
