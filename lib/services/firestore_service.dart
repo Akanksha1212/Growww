@@ -5,7 +5,7 @@ import 'package:grow/datacmodels/tracks.dart';
 import 'package:grow/datacmodels/user.dart';
 
 class FirestoreService {
-  final firestoreInstance = FirebaseFirestore.instance;
+  var firestoreInstance = FirebaseFirestore.instance;
   List<Tracks> _tracks = [];
 
   /// This function takes [email] and returns list of all tracks, along with user progress
@@ -16,6 +16,7 @@ class FirestoreService {
           (value) => value.docs.forEach(
             (element) {
               var track = tracksFromJson(json.encode(element.data()));
+              //if(userData.tracks.isNotEmpty)
               userData.tracks.forEach((element) {
                 if (element.data.id == track.id) {
                   track.progress =
@@ -23,7 +24,6 @@ class FirestoreService {
                 }
               });
               _tracks.add(track);
-              return;
             },
           ),
         );

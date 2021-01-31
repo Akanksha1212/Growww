@@ -24,7 +24,7 @@ class Tracks {
   String days;
   String details;
   String id;
-  int type;
+  String type;
   List<Task> tasks;
   int progress = -1;
 
