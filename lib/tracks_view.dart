@@ -86,46 +86,55 @@ class _TracksViewState extends State<TracksView> {
       body: Center(
         child: FutureBuilder(
           future: future,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Tracks>> snapshot) =>
-                  snapshot.hasData
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 50,
-                            ),
-                            Text(
-                              'commit to\n30 days of...',
-                              style: GoogleFonts.ubuntu(
-                                  fontSize: 36,
-                                  color: Color(0xffC2A081),
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 32),
-                              child: ListView.builder(
-                                itemCount: snapshot.data.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      await Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => GardenHome(),
+          builder: (BuildContext context,
+                  AsyncSnapshot<List<Tracks>> snapshot) =>
+              snapshot.hasData
+                  ? SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Text(
+                            'commit to\n30 days of...',
+                            style: GoogleFonts.ubuntu(
+                                fontSize: 36,
+                                color: Color(0xffC2A081),
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 32),
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: snapshot.data.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    await Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => TaskView(
+                                          id: snapshot.data[index].id,
+                                          newTrack:
+                                              snapshot.data[index].progress ==
+                                                  -1,
+                                          email: user.email,
                                         ),
-                                      );
-                                      refreshPage();
-                                    },
-                                    child: trackCard(snapshot.data[index]),
-                                  ),
+                                      ),
+                                    );
+                                    refreshPage();
+                                  },
+                                  child: trackCard(snapshot.data[index]),
                                 ),
                               ),
                             ),
-                          ],
-                        )
-                      : CircularProgressIndicator(),
+                          ),
+                        ],
+                      ),
+                    )
+                  : CircularProgressIndicator(),
         ),
       ),
     );
