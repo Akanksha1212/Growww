@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:grow/tracks.dart';
+import 'package:grow/services/setup_locator.dart';
+import 'package:grow/tracks_view.dart';
 
 import 'login/login.dart';
 
 void main() async {
+  setupLocator();
   runApp(MyApp());
 }
 
@@ -15,6 +17,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Color(0xff60316E),
+        accentColor: Color(0xffBE82D0),
+      ),
       home: SplashScreen(),
     );
   }
