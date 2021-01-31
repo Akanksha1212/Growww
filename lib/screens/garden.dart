@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grow/widgets/gridDashboard.dart';
 
+import 'bot.dart';
+
 class Garden extends StatefulWidget {
   @override
   _GardenState createState() => _GardenState();
@@ -18,6 +20,14 @@ class _GardenState extends State<Garden> {
         width: MediaQuery.of(context).size.width,
         child: GridDashboard(),
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.message),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BotScreen()),
+            );
+          }),
     );
   }
 }

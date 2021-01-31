@@ -39,7 +39,7 @@ class _TaskViewState extends State<TaskView> {
         builder:
             (BuildContext context, AsyncSnapshot<List<TaskList>> snapshot) {
           return snapshot.hasData
-              ? Center(
+              ? SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
